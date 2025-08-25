@@ -1,9 +1,9 @@
-import { View, Text } from 'react-native'
+import { View, Text } from '@/components/general/Themed'
 import React from 'react'
 
 const CurrentWorkoutScreen = () => {
     return (
-        <View>
+        <View style={{ flex: 1 }}>
             <Text>CurrentWorkoutScreen</Text>
         </View>
     )

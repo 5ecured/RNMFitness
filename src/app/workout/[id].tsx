@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native'
+import { View, Text } from '@/components/general/Themed'
 import React from 'react'
 import { useLocalSearchParams } from 'expo-router'
 
@@ -6,7 +6,7 @@ const WorkoutScreen = () => {
     const { id } = useLocalSearchParams()
 
     return (
-        <View>
+        <View style={{ flex: 1 }}>
             <Text>workout screen: {id}</Text>
         </View>
     )
