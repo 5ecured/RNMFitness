@@ -3,30 +3,31 @@ import React from 'react'
 import { Link } from 'expo-router'
 import Colors from '@/constants/Colors'
 import { View, Text } from '@/components/general/Themed'
+import CustomButton from '@/components/general/CustomButton'
+import Card from '@/components/general/Card'
+import WorkoutListItem from '@/components/workouts/WorkoutListItem'
+import workouts from '@/data/dummyWorkouts'
 
+const workout = workouts[1]
 
 const HomeScreen = () => {
     return (
         <View
             style={{
                 flex: 1,
-                alignItems: 'center',
                 gap: 10,
+                padding: 10,
+                backgroundColor: 'transparent'
             }}
         >
-            <Text style={{ fontSize: 30 }}>title</Text>
-            <Link href='/workout/current'>
-                <Text>
-                    Resume current workout
-                </Text>
+            <Link href='/workout/current' asChild>
+                <CustomButton title='Resume workout' type='primary' />
             </Link>
-            <Link href='/workout/123'>
-                <Text>
-                    Open workout with id 123
-                </Text>
-            </Link>
-            <Text>HomeScreen</Text>
-        </View>
+
+            <WorkoutListItem
+                workout={workout}
+            />
+        </View >
     )
 }
 
