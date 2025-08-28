@@ -5,6 +5,7 @@ import { FlatList, KeyboardAvoidingView, Platform } from 'react-native'
 import { useHeaderHeight } from '@react-navigation/elements'
 import { Stack } from 'expo-router'
 import CustomButton from '@/components/general/CustomButton'
+import WorkoutHeader from '@/components/logger/WorkoutHeader'
 
 const CurrentWorkoutScreen = () => {
     const headerHeight = useHeaderHeight()
@@ -29,6 +30,7 @@ const CurrentWorkoutScreen = () => {
                     data={[1, 2, 3]}
                     renderItem={() => <WorkoutExerciseItem />}
                     contentContainerStyle={{ gap: 10, padding: 10 }}
+                    ListHeaderComponent={<WorkoutHeader />}
                 />
             </KeyboardAvoidingView>
         </>
