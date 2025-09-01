@@ -1,17 +1,24 @@
 import { FlatList, useColorScheme } from 'react-native'
 import React from 'react'
-import { Link } from 'expo-router'
+import { Link, router } from 'expo-router'
 import Colors from '@/constants/Colors'
 import { View, Text } from '@/components/general/Themed'
 import CustomButton from '@/components/general/CustomButton'
 import Card from '@/components/general/Card'
 import WorkoutListItem from '@/components/workouts/WorkoutListItem'
-import workouts from '@/data/dummyWorkouts'
 import { create } from 'zustand'
-
-const workout = workouts[0]
+import { useWorkouts } from '@/store'
 
 const HomeScreen = () => {
+    const currentWorkout = useWorkouts(state => state.currentWorkout)
+    const startWorkout = useWorkouts(state => state.startWorkout)
+    const workouts = useWorkouts(state => state.workouts)
+
+    const onStartWorkout = () => {
+        startWorkout()
+        router.push('/workout/current')
+    }
+
     return (
         <View
             style={{
@@ -21,9 +28,15 @@ const HomeScreen = () => {
                 backgroundColor: 'transparent'
             }}
         >
-            <Link href='/workout/current' asChild>
-                <CustomButton title='Resume workout' type='primary' />
-            </Link>
+
+            {currentWorkout ? (
+                <Link href='/workout/current' asChild>
+                    <CustomButton title='Resume workout' type='primary' />
+                </Link>
+            ) : (
+                <CustomButton title='Start new workout' type='primary' onPress={onStartWorkout} />
+            )}
+
 
             <FlatList
                 data={workouts}
