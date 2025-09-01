@@ -7,6 +7,7 @@ import CustomButton from '@/components/general/CustomButton'
 import Card from '@/components/general/Card'
 import WorkoutListItem from '@/components/workouts/WorkoutListItem'
 import workouts from '@/data/dummyWorkouts'
+import { create } from 'zustand'
 
 const workout = workouts[0]
 
