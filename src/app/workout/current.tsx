@@ -12,6 +12,7 @@ import { useWorkouts } from '@/store'
 const CurrentWorkoutScreen = () => {
     const currentWorkout = useWorkouts(state => state.currentWorkout)
     const finishWorkout = useWorkouts(state => state.finishWorkout)
+    const addExercise = useWorkouts((state => state.addExercise))
 
     const headerHeight = useHeaderHeight()
 
@@ -36,11 +37,11 @@ const CurrentWorkoutScreen = () => {
                 keyboardVerticalOffset={headerHeight}
             >
                 <FlatList
-                    data={[1, 2, 3]}
-                    renderItem={() => <WorkoutExerciseItem />}
+                    data={currentWorkout.exercises}
+                    renderItem={({ item }) => <WorkoutExerciseItem exercise={item} />}
                     contentContainerStyle={{ gap: 10, padding: 10 }}
                     ListHeaderComponent={<WorkoutHeader />}
-                    ListFooterComponent={<SelectExerciseModal onSelectExercise={(name) => console.warn('hahaha', name)} />}
+                    ListFooterComponent={<SelectExerciseModal onSelectExercise={(name) => addExercise(name)} />}
                 />
             </KeyboardAvoidingView>
         </>

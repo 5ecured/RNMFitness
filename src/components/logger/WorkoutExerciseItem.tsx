@@ -3,34 +3,24 @@ import React from 'react'
 import Card from '../general/Card'
 import { StyleSheet } from 'react-native'
 import SetItem from './SetItem'
-import { ExerciseSet } from '@/types/models'
+import { ExerciseSet, ExerciseWithSets } from '@/types/models'
 import CustomButton from '../general/CustomButton'
 
-const WorkoutExerciseItem = () => {
-    const sets: ExerciseSet[] = [
-        {
-            id: '1',
-            weight: 20,
-            reps: 10,
-            exerciseId: 'e1'
-        },
-        {
-            id: '2',
-            weight: 50,
-            reps: 5,
-            exerciseId: 'e1'
-        },
-    ]
+type WorkoutExerciseItem = {
+    exercise: ExerciseWithSets
+}
+
+const WorkoutExerciseItem = ({ exercise }: WorkoutExerciseItem) => {
 
     return (
-        <Card title='Exercise'>
+        <Card title={exercise.name}>
             <View style={styles.header}>
                 <Text style={styles.setNumber}>Set</Text>
                 <Text style={styles.setInfo}>kg</Text>
                 <Text style={styles.setInfo}>Reps</Text>
             </View>
             <View style={{ gap: 5 }}>
-                {sets.map((el, index) => (
+                {exercise.sets.map((el, index) => (
                     <SetItem key={el.id} index={index} set={el} />
                 ))}
             </View>
