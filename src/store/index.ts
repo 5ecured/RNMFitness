@@ -2,6 +2,7 @@ import { createExercise } from "@/services/exerciseService";
 import { finishWorkout, newWorkout } from "@/services/workoutService";
 import { WorkoutWithExercises } from "@/types/models";
 import { create } from "zustand";
+import { immer } from "zustand/middleware/immer";
 
 type State = {
     currentWorkout: WorkoutWithExercises | null,
@@ -15,7 +16,7 @@ type Actions = {
     addExercise: (name: string) => void
 }
 
-export const useWorkouts = create<State & Actions>()((set, get) => ({
+export const useWorkouts = create<State & Actions>()(immer((set, get) => ({
     currentWorkout: null,
     workouts: [],
 
@@ -29,10 +30,17 @@ export const useWorkouts = create<State & Actions>()((set, get) => ({
 
         const finishedWorkout = finishWorkout(currentWorkout)
 
-        set((state) => ({
-            currentWorkout: null,
-            workouts: [finishedWorkout, ...state.workouts]
-        }))
+        set((state) => {
+            // with Immer
+            state.currentWorkout = null
+            state.workouts.unshift(finishedWorkout)
+
+            // without Immer
+            // ({
+            //     currentWorkout: null,
+            //     workouts: [finishedWorkout, ...state.workouts]
+            // })
+        })
     },
 
     addExercise: (name: string) => {
@@ -41,11 +49,17 @@ export const useWorkouts = create<State & Actions>()((set, get) => ({
 
         const newExercise = createExercise(name, currentWorkout.id)
 
-        set((state) => ({
-            currentWorkout: state.currentWorkout && {
-                ...state.currentWorkout,
-                exercises: [...state.currentWorkout?.exercises, newExercise]
-            }
-        }))
+        // With Immer. Don't return it, so use the curly brackets
+        set(state => {
+            state.currentWorkout?.exercises.push(newExercise)
+        })
+
+        // Without Immer
+        // set((state) => ({
+        //     currentWorkout: state.currentWorkout && {
+        //         ...state.currentWorkout,
+        //         exercises: [...state.currentWorkout?.exercises, newExercise]
+        //     }
+        // }))
     }
-}))
+})))
