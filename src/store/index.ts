@@ -98,11 +98,19 @@ export const useWorkouts = create<State & Actions>()(immer((set, get) => ({
 
     deleteSet: (setId) => {
         set(({ currentWorkout }) => {
-            const exercise = currentWorkout?.exercises.find(e => e.sets.some(set => set.id === setId))
+            if (!currentWorkout) return
+
+            const exercise = currentWorkout.exercises.find(e => e.sets.some(set => set.id === setId))
 
             if (!exercise) return
 
             exercise.sets = exercise.sets.filter(set => set.id !== setId)
+
+            if (exercise.sets.length === 0) {
+                // if the last set is deleted, delete the whole exercise as well
+
+                currentWorkout.exercises = currentWorkout.exercises.filter(ex => ex.id !== exercise.id)
+            }
         })
     }
 })))
