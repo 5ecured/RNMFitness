@@ -5,12 +5,14 @@ import { StyleSheet } from 'react-native'
 import SetItem from './SetItem'
 import { ExerciseSet, ExerciseWithSets } from '@/types/models'
 import CustomButton from '../general/CustomButton'
+import { useWorkouts } from '@/store'
 
 type WorkoutExerciseItem = {
     exercise: ExerciseWithSets
 }
 
 const WorkoutExerciseItem = ({ exercise }: WorkoutExerciseItem) => {
+    const addSet = useWorkouts(state => state.addSet)
 
     return (
         <Card title={exercise.name}>
@@ -27,7 +29,7 @@ const WorkoutExerciseItem = ({ exercise }: WorkoutExerciseItem) => {
             <CustomButton
                 title='+ Add set'
                 type='link'
-                onPress={() => console.warn('adding set')}
+                onPress={() => addSet(exercise.id)}
                 style={{ padding: 10, marginTop: 10 }}
             />
         </Card>

@@ -1,6 +1,8 @@
 import { createExercise } from "@/services/exerciseService";
+import { createSet, updateSet } from "@/services/setService";
 import { finishWorkout, newWorkout } from "@/services/workoutService";
-import { WorkoutWithExercises } from "@/types/models";
+import { ExerciseSet, WorkoutWithExercises } from "@/types/models";
+import { current } from "immer";
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 
@@ -14,6 +16,10 @@ type Actions = {
     finishWorkout: () => void,
 
     addExercise: (name: string) => void
+
+    addSet: (exerciseId: string) => void
+
+    updateSet: (setId: string, updatedFields: Pick<ExerciseSet, 'reps' | 'weight'>) => void
 }
 
 export const useWorkouts = create<State & Actions>()(immer((set, get) => ({
@@ -61,5 +67,30 @@ export const useWorkouts = create<State & Actions>()(immer((set, get) => ({
         //         exercises: [...state.currentWorkout?.exercises, newExercise]
         //     }
         // }))
+    },
+
+    addSet: (exerciseId) => {
+        const newSet = createSet(exerciseId)
+
+        set(({ currentWorkout }) => {
+            const exercise = currentWorkout?.exercises.find(e => e.id === exerciseId)
+
+            exercise?.sets?.push(newSet)
+        })
+    },
+
+    updateSet: (setId, updatedFields) => {
+        set(({ currentWorkout }) => {
+
+            const exercise = currentWorkout?.exercises.find(e => e.sets.some(set => set.id === setId))
+
+            const setIndex = exercise?.sets?.findIndex(set => set.id === setId)
+
+            if (!exercise || setIndex === undefined || setIndex === -1) return
+
+            const updatedSet = updateSet(current(exercise?.sets[setIndex]), updatedFields)
+
+            exercise.sets[setIndex] = updatedSet
+        })
     }
 })))
